@@ -1,0 +1,2 @@
+# No third-party Python packages (stdlib only).
+# .srs is compiled by the sing-box binary in CI (fetched by the workflow).
