@@ -83,3 +83,28 @@ jobs:
           ASSETS="dist/tutela.dat dist/manifest.json $(ls dist/*.srs)"
           gh release delete latest --cleanup-tag --yes || true
           gh release create latest $ASSETS --title "latest" --notes-file notes.md
+
+      - name: Publish .srs to rule-set branch (direct raw URLs)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # Serve .srs from a stable direct URL. Release-asset URLs (releases/download/...)
+          # 302-redirect to an ephemeral signed host (release-assets.githubusercontent.com);
+          # some downloaders don't follow it and fail to load the rule-set at startup.
+          # raw.githubusercontent serves a plain 200 (the pattern public rule-set repos use).
+          # Orphan branch, force-pushed each build, so history does not grow.
+          work="$(mktemp -d)"
+          cp dist/*.srs dist/manifest.json "$work"/
+          cd "$work"
+          git init -q -b rule-set
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          {
+            echo "# rule-set (generated, do not edit)"
+            echo
+            echo "Compiled sing-box .srs, served over raw.githubusercontent for direct fetch."
+            echo "Force-pushed on every build - do not base work on this branch."
+          } > README.md
+          git add -A
+          git commit -q -m "rule-sets $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          git push -f "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:rule-set
