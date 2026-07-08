@@ -83,3 +83,30 @@ jobs:
           ASSETS="dist/tutela.dat dist/manifest.json $(ls dist/*.srs)"
           gh release delete latest --cleanup-tag --yes || true
           gh release create latest $ASSETS --title "latest" --notes-file notes.md
+
+      - name: Publish .srs to rule-set branch (direct raw URLs)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # ПОЧЕМУ отдельная ветка, а не release-asset: клиенты (Karing/sing-box) тянут
+          # remote rule-set ПО URL и должны скачать её ДО старта роутера. URL релиз-ассета
+          # (releases/download/...) отдаёт 302 на ЭФЕМЕРНЫЙ подписанный хост
+          # release-assets.githubusercontent.com — клиент этот редирект не проходит
+          # (или хост недостижим) -> rule-set не грузится -> ядро не стартует. raw.github-
+          # usercontent отдаёт ПРЯМОЙ 200 (тот же паттерн, что рабочие публичные rule-set
+          # репо). Ветка orphan + force-push каждый билд = история не растёт.
+          work="$(mktemp -d)"
+          cp dist/*.srs dist/manifest.json "$work"/
+          cd "$work"
+          git init -q -b rule-set
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          {
+            echo "# rule-set (авто, не редактировать)"
+            echo
+            echo "sing-box .srs для ПРЯМОЙ отдачи клиентам через raw.githubusercontent."
+            echo "Force-push на каждый билд — не базировать работу на этой ветке."
+          } > README.md
+          git add -A
+          git commit -q -m "rule-sets $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          git push -f "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:rule-set
