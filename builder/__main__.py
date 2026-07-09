@@ -60,8 +60,10 @@ def main(argv: list[str] | None = None) -> int:
         try:
             text = fetch(s.url)
         except FetchError as e:
-            if s.optional and getattr(e, "not_found", False):
-                print(f"[skip] optional source missing: {s.url}")
+            # optional = best-effort: any failure (404 or unreachable mirror) is
+            # skipped, not fatal — the category still builds from its other sources.
+            if s.optional:
+                print(f"[skip] optional source unavailable: {s.url} ({e})")
                 src_stats.append({"url": s.url, "category": s.category,
                                   "skipped": True})
                 continue

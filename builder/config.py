@@ -33,6 +33,14 @@ SOURCES: list[Source] = [
     Source("threat", f"{_HAGEZI_BASE}/wildcard/tif.medium-onlydomains.txt"),
     # native: per-vendor device telemetry, merged into one category
     *[Source("native", f"{_HAGEZI}/native.{v}.txt") for v in _NATIVE_VENDORS],
+    # ads-ru: Russian-language ad filters (AdGuard Russian filter #1 + RuAdList).
+    # AdBlock/AdGuard syntax; only bare domain rules are extracted (cosmetic /
+    # scriptlet / URL / regex / redirect rules are ignored — see normalize.py).
+    # RuAdList's compiled list is served only from a mirror that can be flaky, so
+    # it is optional: if it is unavailable the category still builds from AdGuard.
+    Source("ads-ru", "https://filters.adtidy.org/extension/ublock/filters/1.txt"),
+    Source("ads-ru", "https://easylist-downloads.adblockplus.org/advblock.txt",
+           optional=True),
 ]
 
 # Quality gate: a category below its floor means a broken build (do not publish).
@@ -41,10 +49,11 @@ CATEGORY_MIN: dict[str, int] = {
     "adslite": 50_000,
     "threat": 100_000,
     "native": 1_000,
+    "ads-ru": 1_000,   # AdGuard Russian alone clears this; RuAdList adds on top
 }
 
 # Deterministic category order (stable diff between builds).
-CATEGORY_ORDER = ["ads", "adslite", "threat", "native"]
+CATEGORY_ORDER = ["ads", "adslite", "threat", "native", "ads-ru"]
 
 # Live threat domains sampled to verify the fresh feed reached the built .dat.
 THREAT_LIVE_SAMPLE = 5
