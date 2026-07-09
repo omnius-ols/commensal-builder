@@ -11,7 +11,8 @@ class Source:
     optional: bool = False  # missing/renamed (404) is skipped, not fatal
 
 
-_HAGEZI = "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/domains"
+_HAGEZI_BASE = "https://raw.githubusercontent.com/hagezi/dns-blocklists/main"
+_HAGEZI = f"{_HAGEZI_BASE}/domains"
 
 _NATIVE_VENDORS = [
     "xiaomi", "winoffice", "samsung", "lgwebos", "roku",
@@ -25,10 +26,11 @@ SOURCES: list[Source] = [
     # adslite: compact high-impact tier (HaGeZi Light). Sized to be fetched over
     # the network before a router starts; the full ads list is too large for that.
     Source("adslite", f"{_HAGEZI}/light.txt"),
-    # threat: single unified feed (malware+phishing+scam+crypto)
-    Source("threat", f"{_HAGEZI}/tif.txt"),
-    Source("threat", f"{_HAGEZI}/hoster.txt", optional=True),
-    Source("threat", f"{_HAGEZI}/hoster-onlydomains.txt", optional=True),
+    # threat: TIF Medium tier (malware+phishing+scam+crypto). Medium, not full TIF:
+    # the full feed (~1.9M domains) does not fit a small resolver's memory. The
+    # tiered files live under wildcard/ (domains/ ships full tif.txt only). Deduped
+    # against ads/native at build time (see __main__) so overlaps aren't stored twice.
+    Source("threat", f"{_HAGEZI_BASE}/wildcard/tif.medium-onlydomains.txt"),
     # native: per-vendor device telemetry, merged into one category
     *[Source("native", f"{_HAGEZI}/native.{v}.txt") for v in _NATIVE_VENDORS],
 ]

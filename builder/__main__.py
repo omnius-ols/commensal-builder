@@ -85,6 +85,18 @@ def main(argv: list[str] | None = None) -> int:
         removed_total += before - len(cats[cat])
     print(f"[allowlist] removed {removed_total} domains")
 
+    # threat dedup: drop threat domains already covered by an ads/native suffix. On
+    # a resolver both categories load as separate matchers, so a domain present in
+    # both is stored twice and wastes memory. Suffix-aware (a parent in ads covers
+    # its subdomains in threat), not a plain set difference.
+    if cats.get("threat"):
+        covered = cats.get("ads", set()) | cats.get("native", set())
+        before = len(cats["threat"])
+        cats["threat"] = {d for d in cats["threat"]
+                          if not allowlist._covered(d, covered)}
+        print(f"[dedup] threat: {before} -> {len(cats['threat'])} "
+              f"(-{before - len(cats['threat'])} covered by ads/native)")
+
     # build .dat (deterministic category order)
     ordered = {c: sorted(cats.get(c, set())) for c in CATEGORY_ORDER if cats.get(c)}
     dat = geosite.build_dat(ordered)
