@@ -120,9 +120,12 @@ def main(argv: list[str] | None = None) -> int:
         print(f"[gate] {cat}: {have} (min {minimum}) {'OK' if ok else 'LOW'}")
         threshold_fail |= not ok
 
-    # canary
+    # canary. Sample fresh-feed threat domains that SURVIVED processing (allowlist
+    # + ads/native dedup). Dedup legitimately drops threat domains already covered
+    # by ads, so sampling the raw feed would flag those as "missing from threat"
+    # even though they are still blocked (by ads).
     sample = sorted(
-        d for d in threat_feed if not allowlist._covered(d, allowlist.SUBTRACT)
+        d for d in threat_feed if d in cats.get("threat", set())
     )[:THREAT_LIVE_SAMPLE]
     canary_fail = False
     try:
