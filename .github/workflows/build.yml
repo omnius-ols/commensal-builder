@@ -71,7 +71,9 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           VERSION="$(python -c "import json;print(json.load(open('dist/manifest.json'))['version'])")"
-          ASSETS="dist/tutela.dat dist/manifest.json $(ls dist/*.srs)"
+          # tutela.dat.sha256sum ships with the .dat so unattended fetchers can
+          # verify the transfer before installing it (see builder/__main__.py).
+          ASSETS="dist/tutela.dat dist/tutela.dat.sha256sum dist/manifest.json $(ls dist/*.srs)"
           gh release create "v${VERSION}" $ASSETS \
             --title "v${VERSION}" --notes-file notes.md || \
             gh release upload "v${VERSION}" $ASSETS --clobber
@@ -80,7 +82,9 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          ASSETS="dist/tutela.dat dist/manifest.json $(ls dist/*.srs)"
+          # tutela.dat.sha256sum ships with the .dat so unattended fetchers can
+          # verify the transfer before installing it (see builder/__main__.py).
+          ASSETS="dist/tutela.dat dist/tutela.dat.sha256sum dist/manifest.json $(ls dist/*.srs)"
           gh release delete latest --cleanup-tag --yes || true
           gh release create latest $ASSETS --title "latest" --notes-file notes.md
 

@@ -7,6 +7,7 @@ Any gate failure exits non-zero (CI skips publishing).
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import subprocess
@@ -103,7 +104,15 @@ def main(argv: list[str] | None = None) -> int:
     ordered = {c: sorted(cats.get(c, set())) for c in CATEGORY_ORDER if cats.get(c)}
     dat = geosite.build_dat(ordered)
     (out / "tutela.dat").write_bytes(dat)
-    print(f"[dat] tutela.dat: {len(dat)} bytes, "
+    # Checksum next to the asset, in `sha256sum -c` format. Consumers fetch the
+    # .dat unattended over the network and cannot tell a truncated transfer from
+    # a good one - a partial geosite file makes the router refuse to start. The
+    # upstream geodata releases ship the same file name convention, so a fetcher
+    # can verify both with identical code.
+    digest = hashlib.sha256(dat).hexdigest()
+    (out / "tutela.dat.sha256sum").write_text(
+        f"{digest}  tutela.dat\n", encoding="utf-8")
+    print(f"[dat] tutela.dat: {len(dat)} bytes, sha256 {digest[:16]}..., "
           f"{ {c: len(v) for c, v in ordered.items()} }")
 
     # round-trip: parse back and verify counts
