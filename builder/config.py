@@ -53,12 +53,8 @@ SOURCES: list[Source] = [
 # Quality gate: a category below its floor means a broken build (do not publish).
 CATEGORY_MIN: dict[str, int] = {
     "ads": 100_000,
-    # Lowered from 50k (2026-08): the upstream Light tier is curated down over
-    # time and now yields ~41k after the allowlist, so the old floor rejected a
-    # healthy build. The floor guards against an empty or truncated fetch, not
-    # against upstream trimming - a smaller adslite is fine, the tier exists to
-    # stay small enough to be fetched over the network before a router starts.
-    "adslite": 35_000,
+    # Guards against an empty fetch; upstream swings ~33k-41k daily.
+    "adslite": 30_000,
     "threat": 100_000,
     "native": 1_000,
     "ads-ru": 1_000,   # AdGuard Russian alone clears this; RuAdList adds on top
