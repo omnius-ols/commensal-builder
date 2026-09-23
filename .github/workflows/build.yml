@@ -112,3 +112,42 @@ jobs:
           git add -A
           git commit -q -m "rule-sets $(date -u +%Y-%m-%dT%H:%M:%SZ)"
           git push -f "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:rule-set
+
+  # Drop v* releases and runs older than 14 days; "latest" is kept.
+  prune:
+    needs: build
+    if: always()
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write   # delete releases and their tags
+      actions: write    # delete workflow runs
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      KEEP_DAYS: "14"
+      KEEP_MIN: "7"
+    steps:
+      - name: Prune versioned releases
+        run: |
+          # Always keep the KEEP_MIN newest.
+          gh release list --limit 1000 --json tagName,publishedAt \
+            --jq "sort_by(.publishedAt) | reverse
+                  | map(select(.tagName | startswith(\"v\")))
+                  | .[${KEEP_MIN}:][]
+                  | select((.publishedAt | fromdateiso8601) < (now - ${KEEP_DAYS} * 86400))
+                  | .tagName" \
+          | while read -r tag; do
+              echo "delete release ${tag}"
+              gh release delete "$tag" --cleanup-tag --yes
+            done
+
+      - name: Prune workflow runs
+        run: |
+          gh api --paginate "repos/${GH_REPO}/actions/runs?per_page=100" \
+            --jq ".workflow_runs[]
+                  | select((.created_at | fromdateiso8601) < (now - ${KEEP_DAYS} * 86400))
+                  | .id" \
+          | while read -r id; do
+              echo "delete run ${id}"
+              gh api -X DELETE "repos/${GH_REPO}/actions/runs/${id}" --silent
+            done
