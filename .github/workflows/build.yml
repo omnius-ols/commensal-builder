@@ -11,14 +11,17 @@ permissions:
 
 env:
   SING_BOX_VERSION: "1.11.15"
+  SING_BOX_SHA256: "950af37eb2d7e55dddae34a18411cd617303fd99d2dc75bc76b6dd9fcd97d9c5"
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97  # v7.0.0
         with:
           python-version: "3.12"
 
@@ -38,6 +41,7 @@ jobs:
         run: |
           url="https://github.com/SagerNet/sing-box/releases/download/v${SING_BOX_VERSION}/sing-box-${SING_BOX_VERSION}-linux-amd64.tar.gz"
           curl -fsSL --retry 3 -o sing-box.tgz "$url"
+          echo "${SING_BOX_SHA256}  sing-box.tgz" | sha256sum -c -
           tar -xzf sing-box.tgz
           sudo install -m 0755 "sing-box-${SING_BOX_VERSION}-linux-amd64/sing-box" /usr/local/bin/sing-box
           sing-box version
