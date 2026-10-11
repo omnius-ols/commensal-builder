@@ -8,6 +8,10 @@ filters:
 - **`<category>.srs`** — binary rule-sets for [sing-box](https://sing-box.sagernet.org/).
 - **`manifest.json`** — build version, sources, per-category counts, delta vs the
   previous release.
+- **`mobile-mini.dat`** — compact geosite for memory-limited clients
+  (`python -m builder.mobile`): upstream `private`, `category-ru`, `category-ads`
+  plus `ads-ru`, `ru-metrics`, `ru-tracking`, `ru-ban`, `ip-detect`, `threat-ru`.
+  Built separately; a failure keeps the previous file.
 
 Artifacts are published as GitHub Release assets (a `latest` tag with stable URLs
 plus a versioned tag per build). Consumers point their auto-update at the release

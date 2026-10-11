@@ -37,6 +37,19 @@ jobs:
           python -m builder --out dist --prev-manifest prev_manifest.json
           # non-zero exit = gate failure -> later steps skip, old release stays.
 
+      - name: Build mobile-mini.dat (independent of tutela.dat)
+        id: mobile
+        continue-on-error: true
+        run: python -m builder.mobile --out dist
+
+      - name: Keep previous mobile-mini.dat on failure
+        if: steps.mobile.outcome != 'success'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release download latest -p 'mobile-mini.dat*' -D dist \
+            || echo "no previous mobile-mini.dat"
+
       - name: Install sing-box
         run: |
           url="https://github.com/SagerNet/sing-box/releases/download/v${SING_BOX_VERSION}/sing-box-${SING_BOX_VERSION}-linux-amd64.tar.gz"
@@ -77,7 +90,7 @@ jobs:
           VERSION="$(python -c "import json;print(json.load(open('dist/manifest.json'))['version'])")"
           # tutela.dat.sha256sum ships with the .dat so unattended fetchers can
           # verify the transfer before installing it (see builder/__main__.py).
-          ASSETS="dist/tutela.dat dist/tutela.dat.sha256sum dist/manifest.json $(ls dist/*.srs)"
+          ASSETS="dist/tutela.dat dist/tutela.dat.sha256sum dist/manifest.json $(ls dist/*.srs) $(ls dist/mobile-mini.dat* 2>/dev/null)"
           gh release create "v${VERSION}" $ASSETS \
             --title "v${VERSION}" --notes-file notes.md || \
             gh release upload "v${VERSION}" $ASSETS --clobber
@@ -88,7 +101,7 @@ jobs:
         run: |
           # tutela.dat.sha256sum ships with the .dat so unattended fetchers can
           # verify the transfer before installing it (see builder/__main__.py).
-          ASSETS="dist/tutela.dat dist/tutela.dat.sha256sum dist/manifest.json $(ls dist/*.srs)"
+          ASSETS="dist/tutela.dat dist/tutela.dat.sha256sum dist/manifest.json $(ls dist/*.srs) $(ls dist/mobile-mini.dat* 2>/dev/null)"
           gh release delete latest --cleanup-tag --yes || true
           gh release create latest $ASSETS --title "latest" --notes-file notes.md
 
@@ -103,6 +116,7 @@ jobs:
           # Orphan branch, force-pushed each build, so history does not grow.
           work="$(mktemp -d)"
           cp dist/*.srs dist/manifest.json "$work"/
+          cp dist/mobile-mini.dat dist/mobile-mini.dat.sha256sum "$work"/ 2>/dev/null || true
           cd "$work"
           git init -q -b rule-set
           git config user.name "github-actions[bot]"
