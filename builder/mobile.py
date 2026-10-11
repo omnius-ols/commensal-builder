@@ -16,11 +16,38 @@ from .fetch import FetchError, fetch
 from .normalize import normalize_text
 
 OUT_NAME = "mobile-mini.dat"
-UPSTREAM = ("https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/"
-            "download/geosite.dat")
+# v2fly/domain-list-community (MIT).
+UPSTREAM = ("https://github.com/v2fly/domain-list-community/releases/latest/"
+            "download/dlc.dat")
 
 # Copied byte-for-byte (keeps full/keyword/regex rule types).
 COPY = ("PRIVATE", "CATEGORY-RU", "CATEGORY-ADS")
+# Per-service categories for split routing (copied byte-for-byte).
+SPLIT_COPY = (
+    "TELEGRAM", "WHATSAPP", "MESSENGER", "SIGNAL", "DISCORD", "VIBER", "LINE",
+    "SLACK", "ZOOM", "MATRIX", "WEBEX",
+    "INSTAGRAM", "FACEBOOK", "META", "X", "TWITTER", "REDDIT", "LINKEDIN",
+    "PINTEREST",
+    "GOOGLE", "YOUTUBE", "GOOGLE-GEMINI", "OPENAI", "ANTHROPIC", "DEEPSEEK",
+    "PERPLEXITY", "XAI", "CATEGORY-AI-!CN",
+    "SPOTIFY", "SOUNDCLOUD", "NETFLIX", "APPLE-MUSIC", "APPLE-TVPLUS", "ICLOUD",
+    "DROPBOX", "PROTONMAIL", "TUTANOTA", "BOOKING",
+    "CATEGORY-CRYPTOCURRENCY", "BINANCE", "TRUSTWALLET",
+    "CATEGORY-MEDIA-RU-BLOCKED", "RUTRACKER",
+)
+# Services with no upstream category of their own.
+SPLIT_EXTRA = {
+    # Apple: push, iMessage/FaceTime, search/Siri, CloudKit, media stores, Shazam
+    "push.apple.com", "ess.apple.com", "facetime.apple.com", "smoot.apple.com",
+    "guzzoni.apple.com", "apple-cloudkit.com", "itunes.apple.com", "shazam.com",
+    # messengers
+    "teams.microsoft.com", "teams.live.com", "teams.cloud.microsoft", "skype.com",
+    "threema.ch", "element.io", "wire.com", "getsession.org", "snapchat.com",
+    "sc-cdn.net",
+    # assistants, security, mail
+    "copilot.microsoft.com", "copilot.cloud.microsoft", "sydney.bing.com",
+    "keepassium.com", "yubico.com", "tuta.com", "proton.me",
+}
 
 # Upstream codes whose "@ads" entries form ru-tracking.
 TRACKING_FROM = ("YANDEX", "SBER", "SBERBANK", "OZON", "WILDBERRIES", "AVITO",
@@ -133,7 +160,7 @@ def _get(url: str, optional: bool) -> set[str]:
 
 def build() -> tuple[bytes, dict[str, int]]:
     up = _entries(fetch_bytes(UPSTREAM))
-    missing = [c for c in COPY + BAN_FROM if c not in up]
+    missing = [c for c in COPY + SPLIT_COPY + BAN_FROM if c not in up]
     if missing:
         raise RuntimeError(f"upstream codes missing: {missing}")
 
@@ -156,7 +183,10 @@ def build() -> tuple[bytes, dict[str, int]]:
         if dropped:
             print(f"[keep] {c}: dropped {dropped}")
 
-    blob = b"".join(geosite._ld(1, up[c]) for c in COPY)
+    # proxy list, not a block list: KEEP does not apply
+    cats["split-extra"] = set(SPLIT_EXTRA)
+
+    blob = b"".join(geosite._ld(1, up[c]) for c in COPY + SPLIT_COPY)
     blob += geosite.build_dat({c: sorted(v) for c, v in cats.items()})
     return blob, {c: len(v) for c, v in cats.items()}
 
@@ -171,7 +201,7 @@ def fetch_bytes(url: str) -> bytes:
 def check(blob: bytes) -> list[str]:
     errs = []
     parsed = {c.lower(): d for c, d in geosite.parse_dat(blob).items()}
-    for c in (x.lower() for x in COPY):
+    for c in (x.lower() for x in COPY + SPLIT_COPY + ("split-extra",)):
         if not parsed.get(c):
             errs.append(f"{c}: empty")
     for c, n in MIN.items():
