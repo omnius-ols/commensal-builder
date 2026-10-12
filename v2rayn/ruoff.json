@@ -1,0 +1,334 @@
+[
+  {
+    "outboundTag": "direct",
+    "domain": [
+      "geosite:private"
+    ],
+    "ip": [
+      "geoip:private"
+    ],
+    "enabled": true,
+    "remarks": "Local network - direct"
+  },
+  {
+    "outboundTag": "block",
+    "domain": [
+      "domain:ipify.org",
+      "domain:ipinfo.io",
+      "domain:ip-api.com",
+      "domain:ipapi.co",
+      "domain:ipapi.com",
+      "domain:ipapi.is",
+      "domain:ipwho.is",
+      "domain:ipwhois.app",
+      "domain:ifconfig.me",
+      "domain:ifconfig.co",
+      "domain:icanhazip.com",
+      "full:checkip.amazonaws.com",
+      "domain:ident.me",
+      "domain:myip.com",
+      "domain:ip.sb",
+      "domain:wtfismyip.com",
+      "domain:ipecho.net",
+      "domain:db-ip.com",
+      "domain:ipgeolocation.io",
+      "domain:ip2location.io",
+      "domain:iplocation.net",
+      "domain:ipdata.co",
+      "domain:geojs.io",
+      "domain:freeipapi.com",
+      "domain:ipregistry.co",
+      "domain:seeip.org",
+      "domain:myexternalip.com",
+      "domain:whatismyipaddress.com",
+      "domain:2ip.io",
+      "full:geoip.maxmind.com",
+      "domain:geolocation-db.com"
+    ],
+    "enabled": true,
+    "remarks": "IP lookup services - block"
+  },
+  {
+    "outboundTag": "block",
+    "domain": [
+      "ext:mobile-mini.dat:ru-ban"
+    ],
+    "enabled": true,
+    "remarks": "VK, Mail.ru, MAX, Kaspersky - block"
+  },
+  {
+    "outboundTag": "block",
+    "domain": [
+      "ext:mobile-mini.dat:ru-metrics"
+    ],
+    "enabled": true,
+    "remarks": "RU web counters - block"
+  },
+  {
+    "outboundTag": "block",
+    "domain": [
+      "ext:mobile-mini.dat:ru-tracking"
+    ],
+    "enabled": true,
+    "remarks": "RU trackers and SDKs - block"
+  },
+  {
+    "outboundTag": "block",
+    "domain": [
+      "ext:mobile-mini.dat:ip-detect"
+    ],
+    "enabled": true,
+    "remarks": "IP lookup services (build list) - block"
+  },
+  {
+    "outboundTag": "block",
+    "domain": [
+      "ext:mobile-mini.dat:threat-ru"
+    ],
+    "enabled": true,
+    "remarks": "Phishing and malware in .ru zones - block"
+  },
+  {
+    "outboundTag": "block",
+    "domain": [
+      "ext:tutela.dat:ads"
+    ],
+    "enabled": true,
+    "remarks": "Ads and metrics (ads) - block"
+  },
+  {
+    "outboundTag": "block",
+    "domain": [
+      "ext:tutela.dat:native"
+    ],
+    "enabled": true,
+    "remarks": "Vendor telemetry - Microsoft, Apple, Samsung, Xiaomi (native) - block"
+  },
+  {
+    "outboundTag": "block",
+    "domain": [
+      "ext:tutela.dat:threat"
+    ],
+    "enabled": true,
+    "remarks": "Threats - phishing, malware (threat) - block"
+  },
+  {
+    "outboundTag": "block",
+    "domain": [
+      "ext:tutela.dat:ads-ru",
+      "geosite:category-ads-all",
+      "domain:adfox.ru",
+      "domain:yabs.yandex.ru",
+      "domain:target.my.com",
+      "domain:smi2.ru",
+      "domain:smi2.net",
+      "domain:24smi.info",
+      "domain:24smi.org",
+      "domain:mediametrics.ru"
+    ],
+    "enabled": true,
+    "remarks": "ADS ru block"
+  },
+  {
+    "outboundTag": "proxy",
+    "domain": [
+      "geosite:category-media-ru-blocked",
+      "geosite:rutracker"
+    ],
+    "enabled": true,
+    "remarks": "Blocked sites in RU zones - VPN"
+  },
+  {
+    "outboundTag": "block",
+    "domain": [
+      "domain:bestchange.ru"
+    ],
+    "enabled": true,
+    "remarks": "RU services inside VPN groups - block"
+  },
+  {
+    "outboundTag": "proxy",
+    "domain": [
+      "geosite:telegram",
+      "geosite:whatsapp",
+      "geosite:messenger",
+      "geosite:signal",
+      "geosite:discord",
+      "geosite:viber",
+      "geosite:line",
+      "geosite:slack",
+      "geosite:zoom",
+      "geosite:matrix",
+      "geosite:webex",
+      "domain:teams.microsoft.com",
+      "domain:teams.live.com",
+      "domain:teams.cloud.microsoft",
+      "domain:skype.com",
+      "domain:threema.ch",
+      "domain:element.io",
+      "domain:wire.com",
+      "domain:getsession.org",
+      "domain:snapchat.com",
+      "domain:sc-cdn.net"
+    ],
+    "enabled": true,
+    "remarks": "Messengers and calls - VPN"
+  },
+  {
+    "outboundTag": "proxy",
+    "domain": [
+      "geosite:icloud",
+      "geosite:apple-music",
+      "geosite:apple-tvplus",
+      "domain:push.apple.com",
+      "domain:ess.apple.com",
+      "domain:facetime.apple.com",
+      "domain:smoot.apple.com",
+      "domain:guzzoni.apple.com",
+      "domain:apple-cloudkit.com",
+      "domain:itunes.apple.com",
+      "domain:shazam.com"
+    ],
+    "enabled": true,
+    "remarks": "Apple: iCloud, iMessage, FaceTime, push, search, Music, TV+, Shazam - VPN"
+  },
+  {
+    "outboundTag": "proxy",
+    "domain": [
+      "geosite:instagram",
+      "geosite:facebook",
+      "geosite:meta",
+      "geosite:x",
+      "geosite:twitter",
+      "geosite:reddit",
+      "geosite:linkedin",
+      "geosite:pinterest"
+    ],
+    "enabled": true,
+    "remarks": "Social networks - VPN"
+  },
+  {
+    "outboundTag": "proxy",
+    "domain": [
+      "geosite:openai",
+      "geosite:anthropic",
+      "geosite:google-gemini",
+      "geosite:deepseek",
+      "geosite:perplexity",
+      "geosite:xai",
+      "geosite:category-ai-!cn",
+      "domain:copilot.microsoft.com",
+      "domain:copilot.cloud.microsoft",
+      "domain:sydney.bing.com"
+    ],
+    "enabled": true,
+    "remarks": "AI (ChatGPT, Claude, Gemini, DeepSeek, Perplexity, Grok, Copilot) - VPN"
+  },
+  {
+    "outboundTag": "proxy",
+    "domain": [
+      "geosite:google",
+      "geosite:youtube"
+    ],
+    "enabled": true,
+    "remarks": "Google and YouTube - VPN"
+  },
+  {
+    "outboundTag": "proxy",
+    "domain": [
+      "geosite:spotify",
+      "geosite:soundcloud",
+      "geosite:netflix"
+    ],
+    "enabled": true,
+    "remarks": "Music and video (Spotify, SoundCloud, Netflix) - VPN"
+  },
+  {
+    "outboundTag": "proxy",
+    "domain": [
+      "geosite:dropbox",
+      "geosite:protonmail",
+      "geosite:tutanota",
+      "domain:proton.me",
+      "domain:tuta.com",
+      "domain:keepassium.com",
+      "domain:yubico.com"
+    ],
+    "enabled": true,
+    "remarks": "Mail, cloud storage, passwords, security keys - VPN"
+  },
+  {
+    "outboundTag": "proxy",
+    "domain": [
+      "geosite:booking"
+    ],
+    "enabled": true,
+    "remarks": "Booking - VPN"
+  },
+  {
+    "outboundTag": "proxy",
+    "domain": [
+      "geosite:category-cryptocurrency",
+      "geosite:binance",
+      "geosite:trustwallet"
+    ],
+    "enabled": true,
+    "remarks": "Crypto wallets and exchanges - VPN"
+  },
+  {
+    "outboundTag": "proxy",
+    "domain": [
+      "geosite:category-media-ru-blocked",
+      "geosite:rutracker"
+    ],
+    "enabled": true,
+    "remarks": "Blocked in RU - VPN"
+  },
+  {
+    "outboundTag": "proxy",
+    "domain": [
+      "geosite:category-anticensorship"
+    ],
+    "enabled": true,
+    "remarks": "VPN clients, Tor, censorship monitoring - VPN"
+  },
+  {
+    "outboundTag": "proxy",
+    "ip": [
+      "geoip:telegram",
+      "geoip:facebook"
+    ],
+    "enabled": true,
+    "remarks": "Messenger IPs (Telegram, WhatsApp) - VPN"
+  },
+  {
+    "outboundTag": "block",
+    "domain": [
+      "geosite:category-ru",
+      "geosite:tld-ru"
+    ],
+    "enabled": true,
+    "remarks": "RU sites and apps, all RU zones - block"
+  },
+  {
+    "outboundTag": "block",
+    "ip": [
+      "geoip:ru"
+    ],
+    "enabled": true,
+    "remarks": "RU IPs - block"
+  },
+  {
+    "outboundTag": "block",
+    "network": "udp",
+    "port": "443",
+    "enabled": true,
+    "remarks": "QUIC"
+  },
+  {
+    "outboundTag": "direct",
+    "port": "0-65535",
+    "enabled": true,
+    "remarks": "Everything else - direct"
+  }
+]

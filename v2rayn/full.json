@@ -1,0 +1,364 @@
+[
+  {
+    "outboundTag": "block",
+    "domain": [
+      "domain:ipify.org",
+      "domain:ipinfo.io",
+      "domain:ip-api.com",
+      "domain:ipapi.co",
+      "domain:ipapi.com",
+      "domain:ipapi.is",
+      "domain:ipwho.is",
+      "domain:ipwhois.app",
+      "domain:ifconfig.me",
+      "domain:ifconfig.co",
+      "domain:icanhazip.com",
+      "full:checkip.amazonaws.com",
+      "domain:ident.me",
+      "domain:myip.com",
+      "domain:ip.sb",
+      "domain:wtfismyip.com",
+      "domain:ipecho.net",
+      "domain:db-ip.com",
+      "domain:ipgeolocation.io",
+      "domain:ip2location.io",
+      "domain:iplocation.net",
+      "domain:ipdata.co",
+      "domain:geojs.io",
+      "domain:freeipapi.com",
+      "domain:ipregistry.co",
+      "domain:seeip.org",
+      "domain:myexternalip.com",
+      "domain:whatismyipaddress.com",
+      "domain:2ip.io",
+      "full:geoip.maxmind.com",
+      "domain:geolocation-db.com"
+    ],
+    "enabled": true,
+    "remarks": "IP lookup services - block"
+  },
+  {
+    "outboundTag": "block",
+    "domain": [
+      "ext:mobile-mini.dat:ru-ban"
+    ],
+    "enabled": true,
+    "remarks": "VK, Mail.ru, MAX, Kaspersky - block"
+  },
+  {
+    "outboundTag": "block",
+    "domain": [
+      "ext:mobile-mini.dat:ru-metrics"
+    ],
+    "enabled": true,
+    "remarks": "RU web counters - block"
+  },
+  {
+    "outboundTag": "block",
+    "domain": [
+      "ext:mobile-mini.dat:ru-tracking"
+    ],
+    "enabled": true,
+    "remarks": "RU trackers and SDKs - block"
+  },
+  {
+    "outboundTag": "block",
+    "domain": [
+      "ext:mobile-mini.dat:ip-detect"
+    ],
+    "enabled": true,
+    "remarks": "IP lookup services (build list) - block"
+  },
+  {
+    "outboundTag": "block",
+    "domain": [
+      "ext:mobile-mini.dat:threat-ru"
+    ],
+    "enabled": true,
+    "remarks": "Phishing and malware in .ru zones - block"
+  },
+  {
+    "outboundTag": "block",
+    "domain": [
+      "ext:tutela.dat:ads"
+    ],
+    "enabled": true,
+    "remarks": "Ads and metrics (ads) - block"
+  },
+  {
+    "outboundTag": "block",
+    "domain": [
+      "ext:tutela.dat:native"
+    ],
+    "enabled": true,
+    "remarks": "Vendor telemetry - Microsoft, Apple, Samsung, Xiaomi (native) - block"
+  },
+  {
+    "outboundTag": "block",
+    "domain": [
+      "ext:tutela.dat:threat"
+    ],
+    "enabled": true,
+    "remarks": "Threats - phishing, malware (threat) - block"
+  },
+  {
+    "outboundTag": "block",
+    "domain": [
+      "ext:tutela.dat:ads-ru",
+      "geosite:category-ads-all",
+      "domain:adfox.ru",
+      "domain:yabs.yandex.ru",
+      "domain:target.my.com",
+      "domain:smi2.ru",
+      "domain:smi2.net",
+      "domain:24smi.info",
+      "domain:24smi.org",
+      "domain:mediametrics.ru"
+    ],
+    "enabled": true,
+    "remarks": "ADS ru block"
+  },
+  {
+    "outboundTag": "proxy",
+    "domain": [
+      "geosite:telegram"
+    ],
+    "ip": [
+      "geoip:telegram"
+    ],
+    "enabled": true,
+    "remarks": "Telegram"
+  },
+  {
+    "outboundTag": "proxy",
+    "domain": [
+      "geosite:youtube"
+    ],
+    "enabled": true,
+    "remarks": "YouTube"
+  },
+  {
+    "outboundTag": "proxy",
+    "domain": [
+      "geosite:google"
+    ],
+    "ip": [
+      "geoip:google"
+    ],
+    "enabled": true,
+    "remarks": "Google (Search, Gmail, Play, Gemini)"
+  },
+  {
+    "outboundTag": "proxy",
+    "domain": [
+      "geosite:apple"
+    ],
+    "enabled": true,
+    "remarks": "Apple / iCloud"
+  },
+  {
+    "outboundTag": "proxy",
+    "domain": [
+      "geosite:spotify"
+    ],
+    "enabled": true,
+    "remarks": "Spotify"
+  },
+  {
+    "outboundTag": "proxy",
+    "domain": [
+      "geosite:netflix"
+    ],
+    "ip": [
+      "geoip:netflix"
+    ],
+    "enabled": true,
+    "remarks": "Netflix"
+  },
+  {
+    "outboundTag": "proxy",
+    "domain": [
+      "geosite:disney"
+    ],
+    "enabled": true,
+    "remarks": "Disney+"
+  },
+  {
+    "outboundTag": "proxy",
+    "domain": [
+      "geosite:x"
+    ],
+    "ip": [
+      "geoip:twitter"
+    ],
+    "enabled": true,
+    "remarks": "X (Twitter) / Grok"
+  },
+  {
+    "outboundTag": "proxy",
+    "domain": [
+      "geosite:instagram"
+    ],
+    "enabled": true,
+    "remarks": "Instagram"
+  },
+  {
+    "outboundTag": "proxy",
+    "domain": [
+      "geosite:whatsapp"
+    ],
+    "ip": [
+      "geoip:facebook"
+    ],
+    "enabled": true,
+    "remarks": "WhatsApp"
+  },
+  {
+    "outboundTag": "proxy",
+    "domain": [
+      "geosite:meta",
+      "geosite:facebook"
+    ],
+    "enabled": true,
+    "remarks": "Facebook and other Meta"
+  },
+  {
+    "outboundTag": "proxy",
+    "domain": [
+      "geosite:discord"
+    ],
+    "enabled": true,
+    "remarks": "Discord"
+  },
+  {
+    "outboundTag": "proxy",
+    "domain": [
+      "geosite:tiktok"
+    ],
+    "enabled": true,
+    "remarks": "TikTok"
+  },
+  {
+    "outboundTag": "proxy",
+    "domain": [
+      "geosite:twitch"
+    ],
+    "enabled": true,
+    "remarks": "Twitch"
+  },
+  {
+    "outboundTag": "proxy",
+    "domain": [
+      "geosite:reddit"
+    ],
+    "enabled": true,
+    "remarks": "Reddit"
+  },
+  {
+    "outboundTag": "proxy",
+    "domain": [
+      "geosite:linkedin"
+    ],
+    "enabled": true,
+    "remarks": "LinkedIn"
+  },
+  {
+    "outboundTag": "proxy",
+    "domain": [
+      "geosite:signal"
+    ],
+    "enabled": true,
+    "remarks": "Signal"
+  },
+  {
+    "outboundTag": "proxy",
+    "domain": [
+      "geosite:openai"
+    ],
+    "enabled": true,
+    "remarks": "ChatGPT / OpenAI"
+  },
+  {
+    "outboundTag": "proxy",
+    "domain": [
+      "geosite:anthropic"
+    ],
+    "enabled": true,
+    "remarks": "Claude / Anthropic"
+  },
+  {
+    "outboundTag": "proxy",
+    "domain": [
+      "geosite:category-ai-!cn"
+    ],
+    "enabled": true,
+    "remarks": "Other AI (Perplexity, Mistral...)"
+  },
+  {
+    "outboundTag": "proxy",
+    "domain": [
+      "geosite:github"
+    ],
+    "enabled": true,
+    "remarks": "GitHub"
+  },
+  {
+    "outboundTag": "proxy",
+    "domain": [
+      "geosite:microsoft"
+    ],
+    "enabled": true,
+    "remarks": "Microsoft (Bing, Copilot, Office)"
+  },
+  {
+    "outboundTag": "direct",
+    "domain": [
+      "geosite:steam"
+    ],
+    "enabled": true,
+    "remarks": "Steam"
+  },
+  {
+    "outboundTag": "proxy",
+    "domain": [
+      "geosite:category-media-ru-blocked",
+      "geosite:rutracker"
+    ],
+    "enabled": true,
+    "remarks": "Blocked in RU - VPN"
+  },
+  {
+    "outboundTag": "direct",
+    "domain": [
+      "geosite:private",
+      "geosite:category-ru",
+      "domain:ru",
+      "domain:su",
+      "domain:xn--p1ai"
+    ],
+    "enabled": true,
+    "remarks": "RU sites and apps - direct"
+  },
+  {
+    "outboundTag": "direct",
+    "ip": [
+      "geoip:private",
+      "geoip:ru"
+    ],
+    "enabled": true,
+    "remarks": "RU and private IPs - direct"
+  },
+  {
+    "outboundTag": "block",
+    "network": "udp",
+    "port": "443",
+    "enabled": true,
+    "remarks": "QUIC"
+  },
+  {
+    "outboundTag": "proxy",
+    "port": "0-65535",
+    "enabled": true,
+    "remarks": "Everything else - VPN"
+  }
+]

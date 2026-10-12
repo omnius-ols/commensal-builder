@@ -1,0 +1,20 @@
+{
+  "version": "project-2501",
+  "routingItems": [
+    {
+      "remarks": "all-except-RU",
+      "domainStrategy": "IPIfNonMatch",
+      "url": "https://raw.githubusercontent.com/omnius-ols/commensal-builder/main/v2rayn/full.json"
+    },
+    {
+      "remarks": "split",
+      "domainStrategy": "AsIs",
+      "url": "https://raw.githubusercontent.com/omnius-ols/commensal-builder/main/v2rayn/split.json"
+    },
+    {
+      "remarks": "RU-off",
+      "domainStrategy": "IPIfNonMatch",
+      "url": "https://raw.githubusercontent.com/omnius-ols/commensal-builder/main/v2rayn/ruoff.json"
+    }
+  ]
+}
