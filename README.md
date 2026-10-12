@@ -15,8 +15,9 @@ filters:
   `split-extra`. Built separately; a failure keeps the previous file.
   Upstream categories: [v2fly/domain-list-community](https://github.com/v2fly/domain-list-community)
   (MIT, Copyright (c) 2019-present v2fly).
-- **`section6.dat`** / **`section6-ip.dat`** — geosite and geoip, tag `section-6`
-  (`python -m builder.section6`): Russia-based services outside Russian TLDs
+- **`thermoptic.dat`** / **`thermoptic-ip.dat`** — geosite and geoip, tag `thermoptic`
+  (`python -m builder.thermoptic`): Russia-linked companies (subsidiaries,
+  products, apps, services) outside Russian TLDs
   (those are covered by `geosite:tld-ru`) and Russian networks, including
   Russian-owned ASes registered abroad. Sources:
   [v2fly/domain-list-community](https://github.com/v2fly/domain-list-community) (MIT),
@@ -25,7 +26,7 @@ filters:
   [chebur-net/russia-mobile-whitelist](https://github.com/chebur-net/russia-mobile-whitelist) (MIT),
   OFAC SDN list (US Government, public domain),
   [Loyalsoldier/geoip](https://github.com/Loyalsoldier/geoip) (CC BY-SA 4.0 —
-  `section6-ip.dat` is distributed under the same license),
+  `thermoptic-ip.dat` is distributed under the same license),
   [ipverse/rir-ip](https://github.com/ipverse/rir-ip) (CC0),
   [iptoasn.com](https://iptoasn.com/) (PDDL), RIPEstat announced prefixes.
 - **`laughing-man.dat`** / **`laughing-man-ip.dat`** — geosite and geoip, tag

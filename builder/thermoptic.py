@@ -1,10 +1,10 @@
-"""section6.dat + section6-ip.dat: Russia-based services outside Russian TLDs.
+"""thermoptic.dat + thermoptic-ip.dat: Russia-linked companies outside Russian TLDs.
 
-Domains (tag SECTION-6): v2fly category-ru minus Russian TLDs (those are covered
+Domains (tag THERMOPTIC): v2fly category-ru minus Russian TLDs (those are covered
 by geosite:tld-ru), a few v2fly service lists, MIT whitelists, OFAC SDN websites
 of Russia-based entities, and curated entries (vendors, subsidiaries, products
 found by organization name in certificate logs).
-IPs (tag SECTION-6): Russia by location (Loyalsoldier) + by registry (ipverse)
+IPs (tag THERMOPTIC): Russia by location (Loyalsoldier) + by registry (ipverse)
 + ASes registered in RU (iptoasn) + Russian-owned ASes registered abroad.
 Independent of tutela.dat: a failure here never blocks the main build.
 """
@@ -18,12 +18,12 @@ import re
 import sys
 from pathlib import Path
 
-from . import geoip, geosite
+from . import geoip, geosite, protect
 from .fetch import FetchError, fetch
 from .mobile import UPSTREAM, _covered, _domains, _entries, fetch_bytes
 
-OUT, OUT_IP = "section6.dat", "section6-ip.dat"
-TAG = "SECTION-6"
+OUT, OUT_IP = "thermoptic.dat", "thermoptic-ip.dat"
+TAG = "THERMOPTIC"
 
 V2FLY_EXTRA = ("2GIS", "HABR", "FICBOOK", "SBER")
 # MIT
@@ -152,7 +152,7 @@ def build_domains() -> set[str]:
     try:
         doms |= _ofac()
     except FetchError as e:
-        print(f"[section6] OFAC skipped: {e}", file=sys.stderr)
+        print(f"[thermoptic] OFAC skipped: {e}", file=sys.stderr)
     doms |= CURATED | CERT_LOG
     doms = {d for d in doms if d.rsplit(".", 1)[-1] not in zones and d not in SKIP}
     return {d for d in doms if not _covered_strict(d, doms)}
@@ -175,7 +175,7 @@ def build_ips() -> list[geoip.Net]:
             if cc == "RU":
                 nets += geoip.range_nets(a, b)
     except OSError as e:
-        print(f"[section6] iptoasn skipped: {e}", file=sys.stderr)
+        print(f"[thermoptic] iptoasn skipped: {e}", file=sys.stderr)
     return geoip.collapse(nets)
 
 
@@ -190,6 +190,14 @@ def check(doms: set[str], nets: list[geoip.Net]) -> list[str]:
     errs += [f"{d}: blocked" for d in MUST_NOT if _covered(d, doms)]
     errs += [f"{ip}: not blocked" for ip in MUST_IP if not geoip.contains(nets, ip)]
     errs += [f"{ip}: blocked" for ip in MUST_NOT_IP if geoip.contains(nets, ip)]
+    errs += protect.critical_domains("thermoptic", doms)
+    errs += protect.critical_ips("thermoptic-ip", nets)
+    prev = protect.previous(OUT)
+    if prev:
+        errs += protect.delta("thermoptic", len(doms), len(geosite.parse_dat(prev).get(TAG, ())))
+    prev = protect.previous(OUT_IP)
+    if prev:
+        errs += protect.delta("thermoptic-ip", len(nets), len(geoip.parse_dat(prev).get(TAG, ())))
     return errs
 
 
@@ -197,11 +205,11 @@ def _write(out: Path, name: str, blob: bytes) -> None:
     (out / name).write_bytes(blob)
     digest = hashlib.sha256(blob).hexdigest()
     (out / f"{name}.sha256sum").write_text(f"{digest}  {name}\n", encoding="utf-8")
-    print(f"[section6] {name}: {len(blob)} bytes, sha256 {digest[:16]}...")
+    print(f"[thermoptic] {name}: {len(blob)} bytes, sha256 {digest[:16]}...")
 
 
 def main(argv: list[str] | None = None) -> int:
-    ap = argparse.ArgumentParser(prog="builder.section6")
+    ap = argparse.ArgumentParser(prog="builder.thermoptic")
     ap.add_argument("--out", default="dist", type=Path)
     args = ap.parse_args(argv)
     try:
@@ -209,7 +217,7 @@ def main(argv: list[str] | None = None) -> int:
     except (FetchError, RuntimeError, OSError, KeyError) as e:
         print(f"[FAIL] {e}", file=sys.stderr)
         return 2
-    print(f"[section6] domains {len(doms)}, nets v4 {sum(n.version == 4 for n in nets)}, "
+    print(f"[thermoptic] domains {len(doms)}, nets v4 {sum(n.version == 4 for n in nets)}, "
           f"v6 {sum(n.version == 6 for n in nets)}")
     errs = check(doms, nets)
     blob = geosite.build_dat({TAG: sorted(doms)})

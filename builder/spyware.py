@@ -23,7 +23,7 @@ import sys
 import time
 from pathlib import Path
 
-from . import geoip, geosite
+from . import geoip, geosite, protect
 from .fetch import FetchError, fetch
 
 OUT, OUT_IP = "laughing-man.dat", "laughing-man-ip.dat"
@@ -170,6 +170,15 @@ def check(rules, nets) -> list[str]:
         errs.append(f"ips: {len(nets)} < {MIN_IPS}")
     errs += [f"{d}: not blocked" for d in MUST if not _matches(d, rules)]
     errs += [f"{d}: blocked" for d in MUST_NOT if _matches(d, rules)]
+    errs += protect.critical_domains("spyware", {d for t, d in rules if t == 2},
+                                     {d for t, d in rules if t == 3})
+    errs += protect.critical_ips("spyware-ip", nets)
+    prev = protect.previous(OUT)
+    if prev:
+        errs += protect.delta("spyware", len(rules), len(geosite.parse_dat(prev).get(TAG, ())))
+    prev = protect.previous(OUT_IP)
+    if prev:
+        errs += protect.delta("spyware-ip", len(nets), len(geoip.parse_dat(prev).get(TAG, ())))
     return errs
 
 

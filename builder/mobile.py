@@ -10,7 +10,7 @@ import hashlib
 import sys
 from pathlib import Path
 
-from . import allowlist, geosite
+from . import allowlist, geosite, protect
 from .config import SOURCES
 from .fetch import FetchError, fetch
 from .normalize import normalize_text
@@ -211,6 +211,13 @@ def check(blob: bytes) -> list[str]:
         for d in doms:
             if not _covered(d, parsed.get(c, set())):
                 errs.append(f"{c}: {d} not blocked")
+    for c in ("private", "category-ru", "category-ads", *MIN):
+        errs += protect.critical_domains(c, parsed.get(c, set()))
+    prev = protect.previous(OUT_NAME)
+    if prev:
+        old = {c.lower(): len(d) for c, d in geosite.parse_dat(prev).items()}
+        for c in MIN:
+            errs += protect.delta(c, len(parsed.get(c, ())), old.get(c))
     ours = set().union(*(parsed.get(c, set()) for c in MIN))
     for k in sorted(KEEP):
         if _covered(k, ours):

@@ -6,8 +6,13 @@ on:
     - cron: "0 2 * * *"
   workflow_dispatch:
 
+# Default token is read-only; jobs that publish ask for write themselves.
 permissions:
-  contents: write
+  contents: read
+
+concurrency:
+  group: build
+  cancel-in-progress: false
 
 env:
   SING_BOX_VERSION: "1.11.15"
@@ -16,6 +21,9 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 60
+    permissions:
+      contents: write   # releases and the rule-set branch
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
@@ -40,6 +48,7 @@ jobs:
       - name: Build mobile-mini.dat (independent of tutela.dat)
         id: mobile
         continue-on-error: true
+        timeout-minutes: 20
         run: python -m builder.mobile --out dist
 
       - name: Keep previous mobile-mini.dat on failure
@@ -50,21 +59,23 @@ jobs:
           gh release download latest -p 'mobile-mini.dat*' -D dist \
             || echo "no previous mobile-mini.dat"
 
-      - name: Build section6.dat (independent of tutela.dat)
-        id: section6
+      - name: Build thermoptic.dat (independent of tutela.dat)
+        id: thermoptic
         continue-on-error: true
-        run: python -m builder.section6 --out dist
+        timeout-minutes: 20
+        run: python -m builder.thermoptic --out dist
 
-      - name: Keep previous section6.dat on failure
-        if: steps.section6.outcome != 'success'
+      - name: Keep previous thermoptic.dat on failure
+        if: steps.thermoptic.outcome != 'success'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release download latest -p 'section6*' -D dist || echo "no previous section6"
+          gh release download latest -p 'thermoptic*' -D dist || echo "no previous thermoptic"
 
       - name: Build laughing-man.dat (independent of tutela.dat)
         id: spyware
         continue-on-error: true
+        timeout-minutes: 20
         run: python -m builder.spyware --out dist
 
       - name: Keep previous laughing-man.dat on failure
@@ -114,7 +125,7 @@ jobs:
           VERSION="$(python -c "import json;print(json.load(open('dist/manifest.json'))['version'])")"
           # tutela.dat.sha256sum ships with the .dat so unattended fetchers can
           # verify the transfer before installing it (see builder/__main__.py).
-          ASSETS="dist/tutela.dat dist/tutela.dat.sha256sum dist/manifest.json $(ls dist/*.srs) $(ls dist/mobile-mini.dat* dist/section6*.dat* dist/laughing-man*.dat* 2>/dev/null)"
+          ASSETS="dist/tutela.dat dist/tutela.dat.sha256sum dist/manifest.json $(ls dist/*.srs) $(ls dist/mobile-mini.dat* dist/thermoptic*.dat* dist/laughing-man*.dat* 2>/dev/null)"
           gh release create "v${VERSION}" $ASSETS \
             --title "v${VERSION}" --notes-file notes.md || \
             gh release upload "v${VERSION}" $ASSETS --clobber
@@ -125,7 +136,7 @@ jobs:
         run: |
           # tutela.dat.sha256sum ships with the .dat so unattended fetchers can
           # verify the transfer before installing it (see builder/__main__.py).
-          ASSETS="dist/tutela.dat dist/tutela.dat.sha256sum dist/manifest.json $(ls dist/*.srs) $(ls dist/mobile-mini.dat* dist/section6*.dat* dist/laughing-man*.dat* 2>/dev/null)"
+          ASSETS="dist/tutela.dat dist/tutela.dat.sha256sum dist/manifest.json $(ls dist/*.srs) $(ls dist/mobile-mini.dat* dist/thermoptic*.dat* dist/laughing-man*.dat* 2>/dev/null)"
           gh release delete latest --cleanup-tag --yes || true
           gh release create latest $ASSETS --title "latest" --notes-file notes.md
 
@@ -160,6 +171,7 @@ jobs:
     needs: build
     if: always()
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     permissions:
       contents: write   # delete releases and their tags
       actions: write    # delete workflow runs
