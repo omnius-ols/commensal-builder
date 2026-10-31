@@ -1,0 +1,118 @@
+{
+  "version": "2026.10.31-0812",
+  "build": "d8f2d4aaeafc",
+  "generated_at": "2026-10-31T08:12:34.674740+00:00",
+  "sources": [
+    {
+      "url": "https://big.oisd.nl/domainswild2",
+      "category": "ads",
+      "lines": 235146,
+      "domains": 235132
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/pro-onlydomains.txt",
+      "category": "ads",
+      "lines": 214216,
+      "domains": 214202
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/light-onlydomains.txt",
+      "category": "adslite",
+      "lines": 76570,
+      "domains": 76556
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/tif.medium-onlydomains.txt",
+      "category": "threat",
+      "lines": 315753,
+      "domains": 315740
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/native.xiaomi-onlydomains.txt",
+      "category": "native",
+      "lines": 363,
+      "domains": 350
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/native.winoffice-onlydomains.txt",
+      "category": "native",
+      "lines": 396,
+      "domains": 383
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/native.samsung-onlydomains.txt",
+      "category": "native",
+      "lines": 214,
+      "domains": 201
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/native.lgwebos-onlydomains.txt",
+      "category": "native",
+      "lines": 244,
+      "domains": 231
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/native.roku-onlydomains.txt",
+      "category": "native",
+      "lines": 70,
+      "domains": 57
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/native.apple-onlydomains.txt",
+      "category": "native",
+      "lines": 123,
+      "domains": 110
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/native.tiktok-onlydomains.txt",
+      "category": "native",
+      "lines": 563,
+      "domains": 550
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/native.oppo-realme-onlydomains.txt",
+      "category": "native",
+      "lines": 502,
+      "domains": 489
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/native.vivo-onlydomains.txt",
+      "category": "native",
+      "lines": 257,
+      "domains": 244
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/native.huawei-onlydomains.txt",
+      "category": "native",
+      "lines": 148,
+      "domains": 135
+    },
+    {
+      "url": "https://filters.adtidy.org/extension/ublock/filters/1.txt",
+      "category": "ads-ru",
+      "lines": 19815,
+      "domains": 2038
+    },
+    {
+      "url": "https://easylist-downloads.adblockplus.org/advblock.txt",
+      "category": "ads-ru",
+      "lines": 27679,
+      "domains": 9252
+    }
+  ],
+  "categories": {
+    "ads": 362172,
+    "adslite": 76533,
+    "threat": 145276,
+    "native": 2750,
+    "ads-ru": 10296
+  },
+  "allowlist_removed": 91,
+  "delta_vs_previous": {
+    "ads": 80,
+    "adslite": 2278,
+    "threat": -78392,
+    "native": 0,
+    "ads-ru": 0
+  }
+}
